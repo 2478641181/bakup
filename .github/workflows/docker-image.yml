@@ -7,12 +7,28 @@ on:
     branches: [ "master" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build the Docker image with timestamp tag
+      run: |
+        TAG=$(date +%s)
+        echo "TAG=$TAG" >> $GITHUB_ENV
+        docker build . --file Dockerfile --tag my-image-name:$TAG
+
+    - name: Save Docker image to tarball
+      run: |
+        docker save -o my-image.tar my-image-name:$TAG
+
+    - name: Upload image tarball as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: my-image-tarball
+        path: my-image.tar
