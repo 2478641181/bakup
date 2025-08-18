@@ -21,11 +21,11 @@ jobs:
       run: |
         TAG=$(date +%s)
         echo "TAG=$TAG" >> $GITHUB_ENV
-        docker build . --file Dockerfile --tag my-image-name:$TAG
+        docker build . --file Dockerfile --tag jd-sign-server:$TAG
 
     - name: Save Docker image to tarball
       run: |
-        docker save -o my-image.tar my-image-name:$TAG
+        docker save -o my-image.tar jd-sign-server:$TAG
 
     - name: Upload image tarball as artifact
       uses: actions/upload-artifact@v4
