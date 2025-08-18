@@ -19,7 +19,7 @@ jobs:
 
     - name: Build the Docker image with timestamp tag
       run: |
-        TAG=$(date +%s)
+        TAG=latest
         echo "TAG=$TAG" >> $GITHUB_ENV
         docker build . --file Dockerfile --tag jd-sign-server:$TAG
 
